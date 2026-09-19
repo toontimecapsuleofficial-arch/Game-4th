@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#E1F0FA">
+<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>BeatCraft — focused, fast, and a pleasure to use.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+<div id="wipe"><div class="sheet"><svg class="mark"><use href="#i-note"/></svg></div></div>
+<div id="toasts"></div>
+
+<!-- ============ HERO / START (portrait mobile landing) ============ -->
+<section class="screen on" id="scr-hero">
+  <div class="hero">
+    <div class="brand"><svg class="bnote"><use href="#i-note"/></svg><h1 class="wordmark">Beat<span>Craft</span></h1></div>
+    <p class="tagline">focused, fast, and a pleasure to use.</p>
+    <div class="hero-demo">
+      <div class="demo-frame card">
+        <span class="demo-tag">LIVE PREVIEW</span>
+        <canvas id="cv-demo"></canvas>
+      </div>
+    </div>
+    <button class="btn big" id="hero-play"><svg class="ic"><use href="#i-play"/></svg>PLAY</button>
+    <button class="linkish" data-go="hub">Open the menu</button>
+  </div>
+</section>
+
+<!-- ============ HUB ============ -->
+<section class="screen" id="scr-hub">
+  <header class="topbar">
+    <div class="brand-sm">BeatCraft</div>
+    <div class="wallet">
+      <span class="pill c"><svg class="ic"><use href="#i-coin"/></svg><b class="w-c">0</b></span>
+      <span class="pill g"><svg class="ic"><use href="#i-gem"/></svg><b class="w-g">0</b></span>
+    </div>
+  </header>
+  <div class="scroll">
+    <div class="hub-body">
+      <div class="card hub-level">
+        <span class="chip" id="hub-world">Wood World</span>
+        <div class="hub-lv" id="hub-lv">LEVEL 1</div>
+        <div class="hub-meta" id="hub-meta">0 / 1,000 cleared &middot; 0 stars</div>
+        <div class="rankrow">
+          <span class="rankchip" id="hub-rank"><svg class="ic"><use href="#i-crown"/></svg><span id="hub-rank-n">1</span></span>
+          <div class="xpbar"><i id="hub-xp-fill" style="width:0%"></i></div>
+          <span class="xptxt" id="hub-xp-txt">0/250</span>
+        </div>
+        <button class="btn big" id="hub-play"><svg class="ic"><use href="#i-play"/></svg>PLAY</button>
+      </div>
+      <nav class="hub-nav">
+        <button data-go="map"><span class="hnb" style="color:var(--sky)"><svg class="ic"><use href="#i-map"/></svg></span>Map</button>
+        <button data-go="shop"><span class="hnb" style="color:var(--amber)"><svg class="ic"><use href="#i-shop"/></svg></span>Shop</button>
+        <button data-go="chal"><span class="hnb" style="color:var(--coral)"><svg class="ic"><use href="#i-bolt"/></svg></span>Daily</button>
+        <button data-go="modes"><span class="hnb" style="color:var(--red)"><svg class="ic"><use href="#i-target"/></svg></span>Modes</button>
+        <button data-go="profile"><span class="hnb" style="color:var(--grass)"><svg class="ic"><use href="#i-user"/></svg></span>Stats</button>
+        <button data-go="settings"><span class="hnb" style="color:var(--navy)"><svg class="ic"><use href="#i-gear"/></svg></span>Settings</button>
+      </nav>
+      <div class="card streak">
+        <div class="st-head"><svg class="ic"><use href="#i-flame"/></svg><b>DAILY STREAK</b><span id="st-count">0 days</span></div>
+        <div class="st-days" id="st-days"></div>
+        <div class="st-msg n" id="st-msg">Play every day for bonus coins.</div>
+        <div class="st-msg n" id="st-freeze" style="display:none">&nbsp;</div>
+      </div>
+      <div class="card mcard" id="wheel-card">
+        <div class="mc-head"><svg class="ic" style="color:var(--amber)"><use href="#i-wheel"/></svg><b>DAILY SPIN</b><small id="wheel-sub">Free spin ready!</small></div>
+        <div class="wheel-wrap">
+          <div class="wheel-stage" id="wheel-stage">
+            <div class="wheel-glow"></div>
+            <div class="wheel-shell" id="wheel-shell">
+              <svg viewBox="0 0 120 120" class="wheel-svg">
+                <circle cx="60" cy="60" r="59" class="wheel-rim"/>
+                <g id="wheel-rotor" class="wheel-rotor"></g>
+                <circle cx="60" cy="60" r="15" class="wheel-hubcap"/>
+                <use href="#i-wheel" x="51" y="51" width="18" height="18" style="color:#263259"/>
+              </svg>
+              <svg class="wheel-pointer" viewBox="0 0 26 30"><path d="M13 30 2 11.5A11 11 0 1 1 24 11.5Z" fill="var(--coral)" stroke="#263259" stroke-width="3"/><circle cx="13" cy="11.5" r="3.6" fill="#fff"/></svg>
+            </div>
+          </div>
+          <div class="wheel-sub-lbl">Spin for coins, gems, or a Streak Freeze.</div>
+          <button class="btn sm green" id="wheel-btn">SPIN</button>
+        </div>
+      </div>
+      <footer class="foot">Tap to the beat. That's the whole game.</footer>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LEVEL MAP ============ -->
+<section class="screen" id="scr-map">
+  <header class="shead">
+    <button class="navb" data-go="hub" aria-label="Back"><svg class="ic"><use href="#i-back"/></svg></button>
+    <h1>Level Map</h1>
+    <div class="wallet">
+      <span class="pill c"><svg class="ic"><use href="#i-coin"/></svg><b class="w-c">0</b></span>
+      <span class="pill g"><svg class="ic"><use href="#i-gem"/></svg><b class="w-g">0</b></span>
+    </div>
+    <button class="btn sm ghost" id="map-jump">NOW</button>
+  </header>
+  <div class="scroll" id="map-list"></div>
+  <div class="mapbar"><button class="btn big" id="map-play">PLAY LEVEL 1</button></div>
+</section>
+
+<!-- ============ SHOP ============ -->
+<section class="screen" id="scr-shop">
+  <header class="shead">
+    <button class="navb" data-go="hub" aria-label="Back"><svg class="ic"><use href="#i-back"/></svg></button>
+    <h1>Shop</h1>
+    <div class="wallet">
+      <span class="pill c"><svg class="ic"><use href="#i-coin"/></svg><b class="w-c">0</b></span>
+      <span class="pill g"><svg class="ic"><use href="#i-gem"/></svg><b class="w-g">0</b></span>
+    </div>
+  </header>
+  <div class="tabs" id="shop-tabs">
+    <button data-tab="skins" class="on">Skins</button>
+    <button data-tab="trails">Trails</button>
+    <button data-tab="inst">Sound</button>
+    <button data-tab="pow">Power</button>
+    <button data-tab="boost">Boost</button>
+  </div>
+  <div class="scroll" id="shop-list"></div>
+  <div class="shop-note">Gems come from flawless clears — never from difficulty.</div>
+</section>
+
+<!-- ============ SETTINGS ============ -->
+<section class="screen" id="scr-settings">
+  <header class="shead">
+    <button class="navb" data-go="hub" aria-label="Back"><svg class="ic"><use href="#i-back"/></svg></button>
+    <h1>Settings</h1>
+  </header>
+  <div class="scroll"><div class="pad">
+    <div class="card set">
+      <button class="trow" data-set="music"><span class="ticon sky"><svg class="ic"><use href="#i-music"/></svg></span><span class="ttxt"><b>Music</b><small>Funky backing beat &amp; count-in</small></span><span class="tgl"></span></button>
+      <button class="trow" data-set="sfx"><span class="ticon grass"><svg class="ic"><use href="#i-sound"/></svg></span><span class="ttxt"><b>Sound Effects</b><small>Note hits &amp; stings</small></span><span class="tgl"></span></button>
+      <button class="trow" data-set="motion"><span class="ticon coral"><svg class="ic"><use href="#i-motion"/></svg></span><span class="ttxt"><b>Reduced Motion</b><small>Calmer particles, no shake</small></span><span class="tgl"></span></button>
+      <button class="trow" data-set="shapes"><span class="ticon sun"><svg class="ic"><use href="#i-eye"/></svg></span><span class="ttxt"><b>Shape Aids</b><small>Lane &amp; judgment icons, not color alone</small></span><span class="tgl"></span></button>
+    </div>
+    <div class="card set">
+      <div class="arow"><span class="ticon sky"><svg class="ic"><use href="#i-target"/></svg></span><span class="ttxt"><b>Hit Assist</b><small>Widens the timing window &middot; assisted runs are tagged</small></span></div>
+      <div class="seg" id="assist-seg">
+        <button data-a="0">OFF</button><button data-a="1">+20%</button><button data-a="2">+40%</button><button data-a="3">+60%</button>
+      </div>
+    </div>
+    <div class="card set"><div class="drow">
+      <span class="ticon coral"><svg class="ic"><use href="#i-note"/></svg></span>
+      <span class="ttxt"><b>Replay Tutorial</b><small>Relearn all five note types.</small></span>
+      <button class="btn sm green" id="set-tut">PLAY</button>
+    </div></div>
+    <div class="card set"><div class="drow">
+      <span class="ttxt"><b>Reset progress</b><small>Wipes all levels, coins and items.</small></span>
+      <button class="btn sm" id="set-reset">RESET</button>
+    </div></div>
+  </div></div>
+</section>
+
+<!-- ============ PROFILE ============ -->
+<section class="screen" id="scr-profile">
+  <header class="shead">
+    <button class="navb" data-go="hub" aria-label="Back"><svg class="ic"><use href="#i-back"/></svg></button>
+    <h1>Profile</h1>
+    <div class="wallet">
+      <span class="pill c"><svg class="ic"><use href="#i-coin"/></svg><b class="w-c">0</b></span>
+      <span class="pill g"><svg class="ic"><use href="#i-gem"/></svg><b class="w-g">0</b></span>
+    </div>
+  </header>
+  <div class="scroll"><div class="pad">
+    <div class="pstats" id="p-stats"></div>
+    <h3 class="h3">Badges</h3>
+    <div class="bgrid" id="p-badges"></div>
+    <div style="height:calc(16px + env(safe-area-inset-bottom))"></div>
+  </div></div>
+</section>
+
+<!-- ============ DAILY CHALLENGE ============ -->
+<section class="screen" id="scr-chal">
+  <header class="shead">
+    <button class="navb" data-go="hub" aria-label="Back"><svg class="ic"><use href="#i-back"/></svg></button>
+    <h1>Daily Challenge</h1>
+  </header>
+  <div class="scroll"><div class="pad">
+    <div class="card chal">
+      <div class="chal-head">
+        <span class="ticon coral"><svg class="ic"><use href="#i-bolt"/></svg></span>
+        <div><h2>COMBO CHALLENGE</h2><div class="chal-sub">One fixed pattern &middot; same for everyone today</div></div>
+      </div>
+      <div class="chal-cd" id="chal-cd"><svg class="ic"><use href="#i-clock"/></svg>Resets at midnight</div>
+      <div class="chal-bests">
+        <div><small>TODAY'S BEST</small><b id="chal-today">&mdash;</b></div>
+        <div><small>ALL-TIME BEST</small><b id="chal-at">&mdash;</b></div>
+      </div>
+      <p class="chal-note">A mix of every note type across all four lanes. Your best score of the day is saved &mdash; replay as often as you like.</p>
+      <button class="btn big" id="chal-start"><svg class="ic"><use href="#i-play"/></svg>START CHALLENGE</button>
+    </div>
+  </div></div>
+</section>
+
+<!-- ============ GAME MODES ============ -->
+<section class="screen" id="scr-modes">
+  <header class="shead">
+    <button class="navb" data-go="hub" aria-label="Back"><svg class="ic"><use href="#i-back"/></svg></button>
+    <h1>Game Modes</h1>
+  </header>
+  <div class="scroll"><div class="pad">
+
+    <div class="card chal modecard">
+      <div class="chal-head">
+        <span class="ticon coral"><svg class="ic"><use href="#i-flame"/></svg></span>
+        <div><h2>GAUNTLET</h2><div class="chal-sub">5 random levels &middot; back to back</div></div>
+      </div>
+      <p class="chal-note">Five random levels played one after another. Hearts carry over the whole run &mdash; there's no healing between levels, so every miss counts all the way to the finish.</p>
+      <div class="chal-bests"><div><small>BEST TOTAL SCORE</small><b id="mode-gauntlet-best">&mdash;</b></div></div>
+      <button class="btn big" id="mode-gauntlet-start"><svg class="ic"><use href="#i-play"/></svg>START GAUNTLET</button>
+    </div>
+
+    <div class="card chal modecard">
+      <div class="chal-head">
+        <span class="ticon sun"><svg class="ic"><use href="#i-bolt"/></svg></span>
+        <div><h2>ENDLESS</h2><div class="chal-sub">Procedural notes &middot; tempo keeps climbing</div></div>
+      </div>
+      <p class="chal-note">A never-ending procedurally generated track. The BPM creeps up the longer you last &mdash; there's no clearing this one, just seeing how far you get before you fail.</p>
+      <div class="chal-bests">
+        <div><small>BEST SCORE</small><b id="mode-endless-best">&mdash;</b></div>
+        <div><small>TOP BPM</small><b id="mode-endless-bpm">&mdash;</b></div>
+      </div>
+      <button class="btn big" id="mode-endless-start"><svg class="ic"><use href="#i-play"/></svg>START ENDLESS</button>
+    </div>
+
+    <div class="card chal modecard">
+      <div class="chal-head">
+        <span class="ticon grass"><svg class="ic"><use href="#i-eye"/></svg></span>
+        <div><h2>ZEN</h2><div class="chal-sub">No score &middot; just play</div></div>
+      </div>
+      <p class="chal-note">No score, no fail, no pressure &mdash; just relaxed music and gentle visuals over a long, easy-going track. Great for winding down.</p>
+      <button class="btn big green" id="mode-zen-start"><svg class="ic"><use href="#i-play"/></svg>START ZEN</button>
+    </div>
+
+    <div class="card chal modecard">
+      <div class="chal-head">
+        <span class="ticon sky"><svg class="ic"><use href="#i-target"/></svg></span>
+        <div><h2>HARDCORE</h2><div class="chal-sub">No power-ups &middot; tight timing</div></div>
+      </div>
+      <p class="chal-note">Your current level, no power-ups allowed, and a noticeably tighter hit window. Score here is tracked on its own best-score board, separate from your normal runs.</p>
+      <div class="chal-bests"><div><small>YOUR BEST</small><b id="mode-hardcore-best">&mdash;</b></div></div>
+      <button class="btn big" id="mode-hardcore-start"><svg class="ic"><use href="#i-play"/></svg>START HARDCORE</button>
+    </div>
+
+    <div style="height:calc(16px + env(safe-area-inset-bottom))"></div>
+  </div></div>
+</section>
+
+<!-- ============ GAME ============ -->
+<section class="screen" id="scr-game">
+  <div id="stage">
+    <div class="hud">
+      <div class="hud-l">
+        <div id="hud-hearts"></div>
+        <div id="hud-pow"></div>
+      </div>
+      <div class="hud-c"><small>SCORE</small><b id="hud-score">0</b></div>
+      <button class="hud-pbtn" id="hud-pause" aria-label="Pause"><svg class="ic"><use href="#i-pause"/></svg></button>
+    </div>
+    <canvas id="gcv" width="540" height="760"></canvas>
+    <div id="screenFlash"></div>
+    <div id="comboMilestone" class="combo-milestone"></div>
+    <div class="hud">
+      <div id="hud-combo"><small>COMBO</small><b id="hud-combo-n">&times;0</b></div>
+      <div class="hud-prog" id="hud-progwrap"><div id="hud-fill"></div></div>
+      <div id="hud-lv">LV 1</div>
+    </div>
+
+    <button class="btn sm ghost hidden" id="tut-skip"><span>SKIP TUTORIAL</span><svg class="ic"><use href="#i-chevron-r"/></svg></button>
+    <div id="ready"><h1>READY&hellip;</h1></div>
+
+    <div class="ovl" id="ovl-pre"><div class="modal">
+      <button class="xbtn" id="pre-close" aria-label="Close"><svg class="ic"><use href="#i-x"/></svg></button>
+      <span class="chip" id="pre-world">Wood World</span>
+      <h2 id="pre-title">LEVEL 1</h2>
+      <div id="pre-meta"></div>
+      <div id="pre-best"></div>
+      <div id="pre-tag"></div>
+      <div id="pre-pow"></div>
+      <button class="btn sm ghost" id="pre-shop"><svg class="ic"><use href="#i-shop"/></svg>SHOP BOOSTERS</button>
+      <button class="btn big green" id="pre-start"><svg class="ic"><use href="#i-play"/></svg>START</button>
+    </div></div>
+
+    <div class="ovl" id="ovl-pause"><div class="modal">
+      <h2>PAUSED</h2>
+      <div class="pz-row"><span id="pz-score">0</span><span>&middot;</span><span id="pz-combo">&times;0</span></div>
+      <button class="btn big" id="pz-resume"><svg class="ic"><use href="#i-play"/></svg>RESUME</button>
+      <div class="res-btns" style="margin-top:12px">
+        <button class="btn ghost sm" id="pz-restart">RESTART</button>
+        <button class="btn ghost sm" id="pz-quit">QUIT</button>
+      </div>
+    </div></div>
+
+    <div class="ovl" id="ovl-tut-intro"><div class="modal tut-welcome">
+      <span class="chip" style="background:var(--sun)">FIRST TIME</span>
+      <h2>Welcome to BeatCraft!</h2>
+      <p style="font:700 14px Nunito;opacity:.75;margin:6px 0 0;line-height:1.4">Tap each note <b>exactly when it hits the line</b> — stay on the beat and build your combo!</p>
+      <div class="tut-visual">
+        <div class="tv-note"><svg class="ic" style="width:26px;height:26px;color:#fff"><use href="#i-note"/></svg></div>
+        <span class="tv-arrow">→</span>
+        <div class="tv-line"><b>HIT LINE</b></div>
+        <span>=</span>
+        <span style="font:800 13px 'Baloo 2';color:var(--grass)">PERFECT!</span>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:6px 0 2px">
+        <span style="font:800 11px 'Baloo 2';background:var(--sky-t);border:2.5px solid var(--navy);border-radius:99px;padding:3px 10px">TAP</span>
+        <span style="font:800 11px 'Baloo 2';background:var(--sun-t);border:2.5px solid var(--navy);border-radius:99px;padding:3px 10px">HOLD</span>
+        <span style="font:800 11px 'Baloo 2';background:var(--coral-t);border:2.5px solid var(--navy);border-radius:99px;padding:3px 10px">DOUBLE</span>
+        <span style="font:800 11px 'Baloo 2';background:var(--grass-t);border:2.5px solid var(--navy);border-radius:99px;padding:3px 10px">SWIPE</span>
+      </div>
+      <div class="tut-actions">
+        <button class="btn green" id="tut-intro-start"><svg class="ic"><use href="#i-play"/></svg>START TUTORIAL</button>
+        <button class="btn ghost" id="tut-intro-skip">SKIP</button>
+      </div>
+      <div style="font:700 11px Nunito;opacity:.55;margin-top:8px">~30 sec · You can replay anytime in Settings</div>
+    </div></div>
+    <div class="ovl" id="ovl-tut"><div class="modal">
+      <h2 style="font:800 32px 'Baloo 2';margin:2px 0 6px">TUTORIAL COMPLETE!</h2>
+      <p style="font:700 14px Nunito;opacity:.7;margin:0 0 16px">You know every note type — time to play for real.</p>
+      <button class="btn big green" id="tut-go"><svg class="ic"><use href="#i-play"/></svg>LET'S GO!</button>
+    </div></div>
+
+    <div class="ovl" id="ovl-res"><div class="modal">
+      <h2 class="res-out ok" id="res-out">LEVEL CLEARED!</h2>
+      <div id="res-grade" class="res-grade" style="display:none"></div>
+      <div class="res-stars" id="res-stars"></div>
+      <div class="res-score"><small>SCORE</small><b id="res-score">0</b></div>
+      <div id="res-acc"></div>
+      <div class="res-grid" id="res-grid"></div>
+      <div id="res-stats"></div>
+      <div id="res-coin"></div>
+      <div id="res-tags"></div>
+      <div class="res-btns">
+        <button class="btn ghost" id="res-home"><svg class="ic"><use href="#i-map"/></svg>HOME</button>
+        <button class="btn ghost" id="res-again">AGAIN</button>
+        <button class="btn" id="res-next">NEXT LEVEL</button>
+      </div>
+    </div></div>
+  </div>
+</section>
+</div><!-- /#app -->
+
+<!-- rotate-to-portrait prompt (phones only) -->
+<div id="rotate"><div class="rot-phone"></div><b>ROTATE YOUR PHONE</b><small>BeatCraft plays in portrait.</small></div>
+
+<!-- ============ icon sprite ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="M8.5 5.5 18.5 12 8.5 18.5Z" fill="currentColor" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
+<symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="5" width="4.4" height="14" rx="2.1" fill="currentColor"/><rect x="13.6" y="5" width="4.4" height="14" rx="2.1" fill="currentColor"/></symbol>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="M14.5 5 8 12l6.5 7" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-chevron-r" viewBox="0 0 24 24"><path d="M9.5 5 16 12l-6.5 7" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-map" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4.2" fill="none" stroke="currentColor" stroke-width="2.6"/><circle cx="9.2" cy="9.2" r="1.7" fill="currentColor"/><circle cx="14.8" cy="9.2" r="1.7" fill="currentColor"/><circle cx="9.2" cy="14.8" r="1.7" fill="currentColor"/><circle cx="14.8" cy="14.8" r="1.7" fill="currentColor"/></symbol>
+<symbol id="i-shop" viewBox="0 0 24 24"><path d="M6.2 8.2h11.6l-1.1 11H7.3Z" fill="currentColor"/><path d="M9.2 8.2V7a2.8 2.8 0 0 1 5.6 0v1.2" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.4" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M12 3.2v2.4M12 18.4v2.4M3.2 12h2.4M18.4 12h2.4M5.9 5.9l1.7 1.7M16.4 16.4l1.7 1.7M18.1 5.9l-1.7 1.7M7.6 16.4l-1.7 1.7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6" fill="currentColor"/><path d="M5.2 19.5c.9-3.5 3.6-5.2 6.8-5.2s5.9 1.7 6.8 5.2Z" fill="currentColor"/></symbol>
+<symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 3.5c1 2.6 3.4 3.9 4.4 6.2a6.2 6.2 0 1 1-11 1.2C6.4 8 8 6.5 8.3 4.4c.8 1 1.7 1.6 2.7 1.8C11 5.2 11.4 4.4 12 3.5Z" fill="currentColor"/></symbol>
+<symbol id="i-trophy" viewBox="0 0 24 24"><path d="M7 4h10v4.6a5 5 0 0 1-10 0Z" fill="currentColor"/><path d="M7 5.6H4.4v1.6a3.2 3.2 0 0 0 3.2 3.2M17 5.6h2.6v1.6a3.2 3.2 0 0 1-3.2 3.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M10.4 13.4h3.2v2.8h-3.2z" fill="currentColor"/><rect x="7.6" y="17.6" width="8.8" height="2.8" rx="1.2" fill="currentColor"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.4 14.6 8.5 20.2 9.3 16.1 13.3 17.1 18.9 12 16.2 6.9 18.9 7.9 13.3 3.8 9.3 9.4 8.5Z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="5.5" y="10.5" width="13" height="9.2" rx="2.8" fill="currentColor"/><path d="M8.5 10.5V8.2a3.5 3.5 0 0 1 7 0v2.3" fill="none" stroke="currentColor" stroke-width="2.6"/></symbol>
+<symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4" fill="currentColor"/><circle cx="12" cy="12" r="4.9" fill="none" stroke="#fff" stroke-width="1.9" opacity=".85"/><path d="M12 9v6" stroke="#fff" stroke-width="1.9" stroke-linecap="round" opacity=".85"/></symbol>
+<symbol id="i-gem" viewBox="0 0 24 24"><path d="M12 3.8 19.2 9.4 12 20.2 4.8 9.4Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M4.8 9.4h14.4M12 3.8 9.2 9.4 12 20.2M12 3.8l2.8 5.6L12 20.2" fill="none" stroke="#fff" stroke-width="1.3" opacity=".7"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5 10 17.5 19 7" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6.5 6.5 17.5 17.5M17.5 6.5 6.5 17.5" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></symbol>
+<symbol id="i-note" viewBox="0 0 24 24"><circle cx="9.2" cy="17.3" r="3.4" fill="currentColor"/><path d="M12.6 17.3V5.6c2.7.4 4.7 1.9 5.4 4.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 19.5C6.5 15.8 3.8 12.6 3.8 9.4 3.8 7 5.7 5.2 8 5.2c1.6 0 3 .8 4 2.2 1-1.4 2.4-2.2 4-2.2 2.3 0 4.2 1.8 4.2 4.2 0 3.2-2.7 6.4-8.2 10.1Z" fill="currentColor"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3.8 19 6.4v5.2c0 4.3-2.9 7.2-7 8.6-4.1-1.4-7-4.3-7-8.6V6.4Z" fill="currentColor"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.2 2.8 5.8 13.4h4.6L10.4 21.2 18.2 10.4h-4.7Z" fill="currentColor" stroke-linejoin="round"/></symbol>
+<symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2.6 14 9.2 20.6 12 14 14.8 12 21.4 10 14.8 3.4 12 10 9.2Z" fill="currentColor"/></symbol>
+<symbol id="i-bubble" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.8"/><circle cx="9" cy="9" r="2" fill="currentColor"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="14.5" rx="3" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M4 10.5h16M8.5 3.8v3.6M15.5 3.8v3.6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"/><circle cx="9" cy="14.8" r="1.5" fill="currentColor"/><circle cx="15" cy="14.8" r="1.5" fill="currentColor"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M12 7.5V12l3.2 2.2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
+<symbol id="i-sound" viewBox="0 0 24 24"><path d="M4.5 9.5v5h3.5L13 19V5L8 9.5Z" fill="currentColor"/><path d="M15.8 9.2a4.4 4.4 0 0 1 0 5.6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+<symbol id="i-music" viewBox="0 0 24 24"><circle cx="7.4" cy="17.2" r="2.9" fill="currentColor"/><circle cx="16.6" cy="15.6" r="2.9" fill="currentColor"/><path d="M10.3 17.2V6.4l9.2-1.7v10.9" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-motion" viewBox="0 0 24 24"><path d="M3 12c1.8 0 1.8-5 3.6-5s1.8 8 3.6 8 1.8-8 3.6-8 1.8 8 3.6 8 1.8-3 3.6-3" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.8 12S6 6.2 12 6.2 21.2 12 21.2 12 18 17.8 12 17.8 2.8 12 2.8 12Z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="currentColor"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="2.6"/><circle cx="12" cy="12" r="4.4" fill="none" stroke="currentColor" stroke-width="2.6"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
+<symbol id="i-gift" viewBox="0 0 24 24"><rect x="4" y="10.2" width="16" height="9.6" rx="2" fill="currentColor"/><rect x="3.2" y="6.6" width="17.6" height="4" rx="1.4" fill="currentColor"/><rect x="11.1" y="6.6" width="1.8" height="13.2" fill="#fff" opacity=".55"/><path d="M12 6.6c-1-3.6-6.2-3.6-6.2-.6 0 1.6 2.4 1.6 6.2.6Zm0 0c1-3.6 6.2-3.6 6.2-.6 0 1.6-2.4 1.6-6.2.6Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+<symbol id="i-wheel" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 3.4V12l7 3.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="12" r="2" fill="currentColor"/></symbol>
+<symbol id="i-crown" viewBox="0 0 24 24"><path d="M4 9.2 8 12l4-6.6L16 12l4-2.8-1.4 9.6H5.4Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><rect x="5.2" y="18.6" width="13.6" height="2.2" rx="1" fill="currentColor"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M4.6 12a7.4 7.4 0 0 1 12.6-5.3M19.4 12a7.4 7.4 0 0 1-12.6 5.3" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M17.2 4.6v3.4h-3.4M6.8 19.4v-3.4h3.4" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5.6" r="2.4" fill="currentColor"/><circle cx="6" cy="12" r="2.4" fill="currentColor"/><circle cx="18" cy="18.4" r="2.4" fill="currentColor"/><path d="M8.1 10.8 15.9 6.8M8.1 13.2l7.8 4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></symbol>
+</defs></svg>
+
+<script src="game.js"></script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3d967eb6f6ec652',t:'MTc4OTgyOTQ1OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
